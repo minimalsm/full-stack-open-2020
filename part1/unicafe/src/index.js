@@ -9,13 +9,14 @@ const Button = ({ handleClick, text }) => {
   )
 }
 
-const Display = ({ text, rating }) => {
+const Statistics = ({ text, rating }) => {
   return (
     <div>
       {text}: {rating}
     </div>
   )
 }
+
 
 
 const App = () => {
@@ -31,10 +32,10 @@ const App = () => {
         <Button handleClick={() => setBad(bad + 1)} text='bad'/>
 
 
-      <h2>statistics</h2>
-      <Display text='good' rating={good} />
-      <Display text='neutral' rating={neutral} />
-      <Display text='bad' rating={bad} />
+      <h2>Statistics</h2>
+      <Statistics text='good' rating={good} />
+      <Statistics text='neutral' rating={neutral} />
+      <Statistics text='bad' rating={bad} />
     </div>
   )
 }
