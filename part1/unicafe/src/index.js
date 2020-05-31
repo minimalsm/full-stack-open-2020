@@ -21,22 +21,28 @@ const StatisticsTable = ({ good, neutral, bad }) => {
     }
   
   return (
-
-    <div>
-      <h2>Statistics are fun!!</h2>
-      <Statistic text='good' rating={good} />
-      <Statistic text='neutral' rating={neutral} />
-      <Statistic text='bad' rating={bad} />
-    </div>
+    
+    <table>
+      <tbody>
+        <Statistic text='good' rating={good} />
+        <Statistic text='neutral' rating={neutral} />
+        <Statistic text='bad' rating={bad} />
+        <Statistic text='total' rating={total} />
+        <Statistic text='average' rating={total / 3} />
+        <Statistic text='positive' rating={good / total} />
+      </tbody>
+    </table>
   )
 
 }
 
 const Statistic = ({ text, rating }) => {
   return (
-    <div>
-      {text}: {rating}
-    </div>
+    <tr>
+      <td>
+        {text}: {rating}
+      </td>
+    </tr>
   )
 }
 
