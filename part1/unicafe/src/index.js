@@ -10,7 +10,9 @@ const Button = ({ handleClick, text }) => {
 }
 
 const StatisticsTable = ({ good, neutral, bad }) => {
-  if (good + neutral + bad === 0) {
+  const total = (good + neutral + bad)
+
+  if (total === 0) {
       return (
         <div>
           <h2>No statistics yet!</h2>
