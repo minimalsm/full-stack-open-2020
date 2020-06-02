@@ -3,20 +3,26 @@ import React, { useState } from 'react'
 const Person = ({ person }) => {
  return (
    <div>
-    {person.name}
+    {person.name} {person.number}
    </div>
  )
 }
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas' },
-    { name: 'Alvar Aalto' }
+    { name: 'Arto Hellas', number: '07533001122' },
+    { name: 'Alvar Aalto', number: '07533001123' }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
+
 
   const handleNewName = (e) => {
     setNewName(e.target.value)
+  }
+
+  const handleNewNumber = (e) => {
+    setNewNumber(e.target.value)
   }
 
   const isDuplicate = () => persons.some(person => person.name === newName)
@@ -25,9 +31,10 @@ const App = () => {
   const addPerson = (e) => {
     e.preventDefault()
     const person = {
-      name: newName
+      name: newName,
+      number: newNumber
     }
-
+    
     if (isDuplicate()) {
       alert(`${newName} is already added to phonebook`)
     } else {
@@ -47,6 +54,11 @@ const App = () => {
           <input 
             value={newName}
             onChange={handleNewName}
+          />
+          number:  
+          <input 
+            value={newNumber}
+            onChange={handleNewNumber}
           />
         </div>
         <div>
