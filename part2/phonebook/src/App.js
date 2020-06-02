@@ -19,12 +19,21 @@ const App = () => {
     setNewName(e.target.value)
   }
 
+  const isDuplicate = () => persons.some(person => person.name === newName)
+  
+
   const addPerson = (e) => {
     e.preventDefault()
     const person = {
       name: newName
     }
-    setPersons(persons.concat(person))
+
+    if (isDuplicate()) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      setPersons(persons.concat(person))
+    }
+
     setNewName('')
   }
 
@@ -47,9 +56,7 @@ const App = () => {
 
       <h2>Numbers</h2>
       <div>
-        <p>
           {persons.map(person => <Person person={person} key={person.name} />)}
-        </p>
       </div>
     </div>
   )
