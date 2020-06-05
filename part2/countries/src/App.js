@@ -5,7 +5,7 @@ import axios from 'axios'
 const Search = ({ value, onChange }) => {
   return (
     <div>
-      find countries
+      <span>Search for a country: </span>
       <input
         value={value}
         onChange={onChange}
@@ -16,19 +16,19 @@ const Search = ({ value, onChange }) => {
 
 const AdditionalInfo = () => {
     return (
-      <div>
+      <React.Fragment>
       hi
-      </div>
+      </React.Fragment>
     )
 }
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, handleNewSearch }) => {
   if (countries.length === 1) {
     return (
       <div>
         <h1>{countries[0].name}</h1>
-        <p>capital {countries[0].capital}</p>
-        <p>population {countries[0].population}</p>
+        <p><strong>Capital:</strong> {countries[0].capital}</p>
+        <p><strong>Population:</strong> {countries[0].population}</p>
         <h2>Languages</h2>
         <ul>
           {countries[0].languages.map(el => <li>{el.name}</li>)}
@@ -43,13 +43,18 @@ const Countries = ({ countries }) => {
 
   return (
     <div>
-      {countries.map(c => <Country name={c.name}/>)}
+      {countries.map((c) => 
+        <Country 
+          name={c.name}
+          handleNewSearch={handleNewSearch}
+        />
+      )}
     </div>
   )
 } else {
   return (
     <div>
-      Too many matches, specificy another filter
+      <p>Too many matches, specificy another filter</p>
     </div>
   )
 
@@ -57,10 +62,11 @@ const Countries = ({ countries }) => {
 
 }
 
-const Country = ({ name }) => {
+const Country = ({ name, handleNewSearch }) => {
   return (
     <div>
       {name}
+      <button value={name} onClick={handleNewSearch}>show</button>
     </div>
   )
 }
@@ -93,10 +99,7 @@ const App = () => {
       onChange={handleNewSearch}
       />
 
-      debug: {searchName}
-      Number of countries available === {countries.length}
-
-      <Countries countries={countriesFiltered} />
+      <Countries countries={countriesFiltered} handleNewSearch={handleNewSearch} />
     </div>
   );
 }
