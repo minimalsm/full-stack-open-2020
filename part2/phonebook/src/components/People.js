@@ -3,7 +3,7 @@ import Person from './Person'
 import personService from '../services/persons'
 
 
-const People = ({ people, setPersons }) => {
+const People = ({ people, setPersons, setErrorMessage }) => {
 
   const handleRemovePerson = (id) => {  
     if (window.confirm('Are you sure?')) {
@@ -12,6 +12,16 @@ const People = ({ people, setPersons }) => {
       .then(data => {
         setPersons(people.filter(person => person.id !== id))
       })
+      .catch(error => {
+        setErrorMessage(
+          `Person was already removed from server`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setPersons(people.filter(person => person.id !== id))
+      }
+      )
     }
   }
 
