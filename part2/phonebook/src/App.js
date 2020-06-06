@@ -42,13 +42,26 @@ const App = () => {
     }
     
     if (isDuplicate()) {
-      alert(`${newName} is already added to phonebook`)
+      const replaceNumber = window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)
+      
+      if (replaceNumber) {
+      const duplicatePerson = persons.find(p => p.name === newName)
+      const id = duplicatePerson.id
+
+      personService
+      .update(id, person)
+      .then(returnedPerson => {
+        setPersons(persons.map(person => person.id === id ? returnedPerson : person))
+        setNewName('')
+        setNewNumber('')
+      })}
     } else {  
       personService
       .create(person)
       .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson));
+        setPersons(persons.concat(returnedPerson))
         setNewName('')
+        setNewNumber('')
       })
     }
   }
