@@ -43,8 +43,7 @@ const App = () => {
     
     if (isDuplicate()) {
       alert(`${newName} is already added to phonebook`)
-    } else {
-       
+    } else {  
       personService
       .create(person)
       .then(returnedPerson => {
