@@ -73,7 +73,10 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <People people={peopleToShow}/>
+      <People 
+        people={peopleToShow} 
+        setPersons={setPersons}
+      />
     </div>
   )
 }
