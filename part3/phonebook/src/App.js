@@ -45,6 +45,8 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+
+    //test
     
     if (isDuplicate()) {
       const replaceNumber = window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)
@@ -78,6 +80,13 @@ const App = () => {
         )
         setTimeout(() => {
           setNotification(null)
+        }, 5000)
+      })
+      .catch(error => {
+        const errorMessage = error.response.data.error
+        setErrorMessage(errorMessage)
+        setTimeout(() => {
+          setErrorMessage(null)
         }, 5000)
       })
     }
