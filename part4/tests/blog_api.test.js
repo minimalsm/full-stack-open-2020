@@ -62,6 +62,25 @@ test('a valid blog can be added', async () => {
   )
 })
 
+test('a new blog with no likes in params defaults to 0', async () => {
+  const newBlog = {
+    title: 'New Blog',
+    author: 'Joshua Douglas',
+    url: 'www.loremipsum.com',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.notesInDb()
+  const addedBlog = blogsAtEnd[3]
+
+  expect(addedBlog.likes).toEqual(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
