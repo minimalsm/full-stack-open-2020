@@ -3,23 +3,26 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
 
-  let blogObject = new Blog(helper.initialBlogs[0])
-  await blogObject.save()
 
-  blogObject = new Blog(helper.initialBlogs[1])
-  await blogObject.save()
+describe('when there is initially some blogs saved', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
 
-  blogObject = new Blog(helper.initialBlogs[2])
-  await blogObject.save()
-})
+    let blogObject = new Blog(helper.initialBlogs[0])
+    await blogObject.save()
 
-describe('when there is initially some notes saved', () => {
+    blogObject = new Blog(helper.initialBlogs[1])
+    await blogObject.save()
+
+    blogObject = new Blog(helper.initialBlogs[2])
+    await blogObject.save()
+  })
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -40,7 +43,43 @@ describe('when there is initially some notes saved', () => {
   })
 })
 
-describe('addition of a note', () => {
+describe('addition of a blog', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+
+    let blogObject = new Blog(helper.initialBlogs[0])
+    await blogObject.save()
+
+    blogObject = new Blog(helper.initialBlogs[1])
+    await blogObject.save()
+
+    blogObject = new Blog(helper.initialBlogs[2])
+    await blogObject.save()
+  })
+  let token = null
+  beforeAll(async () => {
+    await User.deleteMany({})
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash('testPassword', saltRounds)
+
+    const user = new User({
+      username: 'testUser',
+      passwordHash,
+    })
+
+    await user.save()
+
+    await api
+      .post('/api/login')
+      .send({ username: 'testUser', password: 'testPassword' })
+      .then((response) => {
+        return (token = response.body.token)
+      })
+    console.log('this is the token', token)
+    return token
+  })
+
   test('suceeds with valid data', async () => {
     const newBlog = {
       title: 'New Blog',
@@ -49,8 +88,11 @@ describe('addition of a note', () => {
       likes: 0
     }
 
+    console.log('TOKENISHERE', token)
+
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -73,6 +115,7 @@ describe('addition of a note', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -91,6 +134,7 @@ describe('addition of a note', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(400)
 
@@ -107,6 +151,7 @@ describe('addition of a note', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(400)
 
@@ -116,19 +161,58 @@ describe('addition of a note', () => {
   })
 })
 
-describe('deletion of a note', () => {
+describe('deletion of a blog', () => {
+  let token = null
+  beforeAll(async () => {
+    await User.deleteMany({})
+    await Blog.deleteMany({})
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash('testPassword', saltRounds)
+
+    const user = new User({
+      username: 'testUser',
+      passwordHash,
+    })
+
+    await user.save()
+
+    await api
+      .post('/api/login')
+      .send({ username: 'testUser', password: 'testPassword' })
+      .then((response) => {
+        return (token = response.body.token)
+      })
+
+    const newBlog = {
+      title: 'Dont steal our software',
+      author: 'Bill Gates',
+      url: 'www.microsoft.com'
+    }
+
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    return token
+  })
+
   test('succeeds with status code 204 if id is valid', async () => {
-    const blogsAtStart = await helper.notesInDb()
+    const blogsAtStart = await Blog.find({}).populate('user')
     const blogToDelete = blogsAtStart[0]
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204)
 
-    const blogsAtEnd = await helper.notesInDb()
+    const blogsAtEnd = await Blog.find({}).populate('user')
 
     expect(blogsAtEnd).toHaveLength(
-      helper.initialBlogs.length - 1
+      blogsAtStart.length - 1
     )
 
     const titles = blogsAtEnd.map(r => r.titles)
@@ -137,7 +221,19 @@ describe('deletion of a note', () => {
   })
 })
 
-describe('updating of a note', () => {
+describe('updating of a blog', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+
+    let blogObject = new Blog(helper.initialBlogs[0])
+    await blogObject.save()
+
+    blogObject = new Blog(helper.initialBlogs[1])
+    await blogObject.save()
+
+    blogObject = new Blog(helper.initialBlogs[2])
+    await blogObject.save()
+  })
   test('succeeds with status code of 200 if id is valid', async () => {
     const blogsAtStart = await helper.notesInDb()
     const blogToUpdate = blogsAtStart[0]
