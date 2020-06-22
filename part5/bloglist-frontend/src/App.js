@@ -52,6 +52,14 @@ const App = () => {
     }
   }
 
+  const handleLike = async (blogObject) => {
+    const updatedBlog = await blogService.update(blogObject)
+    const newBlogs = blogs.map((blog) => { 
+      return blog.id === updatedBlog.id ? updatedBlog : blog
+    })
+    setBlogs(newBlogs) 
+  }
+
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteappUser')
     setUser(null)
@@ -118,7 +126,7 @@ const App = () => {
       <p>{user.name} logged in</p> <button onClick={handleLogout}>log out</button>
       {blogForm()}
       {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} />
       )}
     </div>
   )
