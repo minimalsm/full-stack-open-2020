@@ -16,6 +16,8 @@ const Togglable = (props) => {
   //   }
   // })
 
+  const toggleOffLabel = props.toggleOffLabel ? props.toggleOffLabel : 'cancel'
+
   return (
     <div>
       <div style={hideWhenVisible}>
@@ -23,7 +25,7 @@ const Togglable = (props) => {
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <button onClick={toggleVisibility}>{toggleOffLabel}</button>
       </div>
     </div>
   )
