@@ -8,15 +8,10 @@ import noteService from './services/notes'
 import loginService from './services/login' 
 import NoteForm from './components/NoteForm'
 
-
-
-
 const App = () => {
 const [notes, setNotes] = useState([])
 const [showAll, setShowAll] = useState(true)
 const [errorMessage, setErrorMessage] = useState(null)
-const [username, setUsername] = useState('')
-const [password, setPassword] = useState('')
 const [user, setUser] = useState(null)
 
 useEffect(() => {
@@ -64,43 +59,30 @@ const addNote = (noteObject) => {
     })
 }
 
-
+const loginUser = async (userObject) => {
+  try {
+    const user = await loginService.login(userObject)
+    console.log(user)
+    window.localStorage.setItem(
+      'loggedNoteappUser', JSON.stringify(user)
+    ) 
+    noteService.setToken(user.token)
+    setUser(user) 
+  } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+  }
+}
 
 const notesToShow = showAll 
   ? notes 
   : notes.filter(note => note.important)
 
-const handleLogin = async (event) => {
-  event.preventDefault()
-  try {
-    const user = await loginService.login({
-      username, password
-    })
-
-    window.localStorage.setItem(
-      'loggedNoteappUser', JSON.stringify(user)
-    ) 
-    noteService.setToken(user.token)
-    setUser(user)
-    setUsername('')
-    setPassword('')
-  } catch (exception) {
-    setErrorMessage('Wrong credentials')
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
-  }
-}
-
 const loginForm = () => (
   <Togglable buttonLabel='login'>
-    <LoginForm
-      username={username}
-      password={password}
-      handleUsernameChange={({ target }) => setUsername(target.value)}
-      handlePasswordChange={({ target }) => setPassword(target.value)}
-      handleSubmit={handleLogin}
-    />
+    <LoginForm createUser={loginUser} />
   </Togglable> 
 )
 
