@@ -5,7 +5,7 @@ import Footer from './components/Footer'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import noteService from './services/notes'
-import loginService from './services/login' 
+import loginService from './services/login'
 import NoteForm from './components/NoteForm'
 
 const App = () => {
@@ -41,7 +41,7 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(
           `Note '${note.content}' was already removed from server`
         )
@@ -67,25 +67,25 @@ const App = () => {
       console.log(user)
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
-      ) 
+      )
       noteService.setToken(user.token)
-      setUser(user) 
+      setUser(user)
     } catch (exception) {
-        setErrorMessage('Wrong credentials')
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
-  const notesToShow = showAll 
-    ? notes 
+  const notesToShow = showAll
+    ? notes
     : notes.filter(note => note.important)
 
   const loginForm = () => (
     <Togglable buttonLabel='login'>
       <LoginForm createUser={loginUser} />
-    </Togglable> 
+    </Togglable>
   )
 
   const noteForm = () => (
@@ -99,7 +99,7 @@ const App = () => {
       <h1>Notes</h1>
 
       <Notification message={errorMessage} />
-      
+
       {user === null ?
         loginForm()
         :
@@ -115,15 +115,15 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map((note, i) => 
-          <Note 
+        {notesToShow.map((note, i) =>
+          <Note
             key={i}
             note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)} 
+            toggleImportance={() => toggleImportanceOf(note.id)}
           />
         )}
       </ul>
-      
+
       <Footer />
     </div>
   )
