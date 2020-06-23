@@ -1,5 +1,7 @@
 import React from 'react'
 import Togglable from './Togglable'
+import PropTypes from 'prop-types'
+
 
 const Blog = ({ blog, handleLike, handleDelete, user }) => {
   const blogStyle = {
@@ -11,9 +13,9 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
   }
 
   const handleLikeClick = () => {
-    const changedBlog = { 
-      likes: ++blog.likes, 
-      ...blog, 
+    const changedBlog = {
+      likes: ++blog.likes,
+      ...blog,
     }
 
     handleLike(changedBlog)
@@ -25,18 +27,25 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
   }
 
   return (
-    // eslint-disable-next-line
     <div style={blogStyle}>
       <h4>{blog.title}</h4>
       <Togglable buttonLabel='See Details' toggleOffLabel='Hide Details'>
-      <p>Url: <a href={blog.url}>{blog.url}</a></p>
-      <span>Likes: {blog.likes} <button onClick={handleLikeClick}>like</button></span>
-      <p>Author: {blog.author}</p>
-      <p>Added by {blog.user.username}</p>
-      {user.username === blog.user.username 
-        ? <p><button onClick={handleRemoveClick}>remove</button></p> 
-        : null}
+        <p>Url: <a href={blog.url}>{blog.url}</a></p>
+        <span>Likes: {blog.likes} <button onClick={handleLikeClick}>like</button></span>
+        <p>Author: {blog.author}</p>
+        <p>Added by {blog.user.username}</p>
+        {user.username === blog.user.username
+          ? <p><button onClick={handleRemoveClick}>remove</button></p>
+          : null}
       </Togglable>
     </div>
-)}
+  )}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
+}
+
 export default Blog

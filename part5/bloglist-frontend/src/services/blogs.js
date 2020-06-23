@@ -21,7 +21,7 @@ const create = newObject => {
   return request.then(response => response.data)
 }
 
-const update = async (newObject) => {
+const updateBlog = async (newObject) => {
   const updatedBlog = await axios.put(`${baseUrl}/${newObject.id}`, newObject)
   console.log('this is the service returned data:', updatedBlog.data)
   return updatedBlog.data
@@ -38,4 +38,4 @@ const deleteBlog = async (id) => {
   return blogToBeDeleted.data
 }
 
-export default { getAll, create, setToken, update, deleteBlog }
+export default { getAll, create, setToken, updateBlog, deleteBlog }
