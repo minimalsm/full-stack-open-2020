@@ -76,7 +76,20 @@ const App = () => {
         setErrorMessage(null)
         }, 5000)
       })
-    } 
+  }
+  
+  const deleteBlog = async (id) => {
+    const confirm = window.confirm('Are you sure you want to delete this entry?')
+
+    if (confirm) {
+      await blogService.deleteBlog(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+      setErrorMessage('Blog Deleted')
+      setTimeout(() => {
+        setErrorMessage(null)
+        }, 5000)
+    }
+  }
   
 
   const blogForm = () => (
@@ -128,7 +141,13 @@ const App = () => {
       <p>{user.name} logged in</p> <button onClick={handleLogout}>log out</button>
       {blogForm()}
       {blogsSortedLikes.map(blog =>
-          <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+          <Blog 
+            key={blog.id} 
+            blog={blog} 
+            handleLike={handleLike} 
+            handleDelete={deleteBlog} 
+            user={user}
+          />
       )}
     </div>
   )
