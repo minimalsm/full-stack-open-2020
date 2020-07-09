@@ -70,6 +70,20 @@ describe('Blog app', function() {
 
     })
 
+    describe('and you have created a blog post', function () {
+      beforeEach(function() {
+        cy.createBlog({ title: 'First Blog', author: 'Dostoevsky', url: 'www.first.com' })
+      })
+
+      it.only('you are able to delete it', function () {
+        cy.contains('See Details').click()
+        cy.contains('remove').click()
+
+        cy.get('.error').should('contain', 'Blog Deleted')
+        cy.get('html').should('not.contain', 'First Blog')
+      })
+    })
+
   })
 
 })

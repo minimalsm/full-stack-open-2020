@@ -38,7 +38,7 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
           <span>Likes: {blog.likes} <button className='blog-like' onClick={handleLikeClick}>like</button></span>
           <p>Added by</p>
         </div>
-        {(user.username === blog.user && blog.user.username)
+        {(blog.user && user.username === blog.user.username)
           ? <p><button onClick={handleRemoveClick}>remove</button></p>
           : null}
       </Togglable>
