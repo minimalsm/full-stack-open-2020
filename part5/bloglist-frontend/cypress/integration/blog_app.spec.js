@@ -53,6 +53,23 @@ describe('Blog app', function() {
       cy.contains('See Details').click()
       cy.get('.blog-info').contains('Url: www.google.com')
     })
+
+    describe('and several blogs exist', function () {
+      beforeEach(function(){
+        cy.createBlog({ title: 'First Blog', author: 'Dostoevsky', url: 'www.first.com' })
+        cy.createBlog({ title: 'Second Blog', author: 'Tolstoy', url: 'www.second.com' })
+        cy.createBlog({ title: 'Third Blog', author: 'Bulgakov', url: 'www.third.com' })
+      })
+
+      it('one of them can be liked', function () {
+        cy.contains('See Details').click()
+        cy.contains('like').click().click().click()
+
+        cy.contains('Likes: 3')
+      })
+
+    })
+
   })
 
 })
