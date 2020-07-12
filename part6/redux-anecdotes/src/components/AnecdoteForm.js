@@ -11,9 +11,9 @@ const AnecdoteForm = () => {
     e.preventDefault()
     const content = e.target.anecdote.value
     e.target.anecdote.value = ''
-    
+
     dispatch(addAnecdote(content))
-    dispatch(addNotification(`Anecdote '${content}' has been created`))
+    dispatch(addNotification(`Anecdote '${content}' has been created`, 5))
   }
 
 
