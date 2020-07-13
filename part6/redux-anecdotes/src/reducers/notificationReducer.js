@@ -1,5 +1,5 @@
 const initialState = ''
-
+let timer = null
 
 const notificationReducer = (state = initialState, action) => {
   switch(action.type) {
@@ -14,12 +14,14 @@ const notificationReducer = (state = initialState, action) => {
 }
 
 export const addNotification = (message, duration) => {
+  clearTimeout(timer)
+
   return async dispatch => {
     dispatch({
       type: 'SET_NOTIFICATION',
       data: {message}
     })
-    setTimeout(() => {
+    timer = setTimeout(() => {
       dispatch(clearNotification())
     }, duration * 1000 )
   }
