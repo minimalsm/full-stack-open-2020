@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
-import {
-  BrowserRouter as Router,
-  Switch, Route, Link, useParams, useHistory
-} from "react-router-dom"
+import {  Switch, Route } from "react-router-dom"
 
 import About from './components/About'
 import Menu from './components/Menu'
