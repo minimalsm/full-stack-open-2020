@@ -7,11 +7,14 @@ export const useField = (type) => {
     setValue(event.target.value)
   }
 
-  console.log('THIS IS THE HOOK')
+  const onReset = () => {
+    setValue('')
+  }
 
   return {
     type,
     value,
-    onChange
+    onChange,
+    onReset
   }
 }

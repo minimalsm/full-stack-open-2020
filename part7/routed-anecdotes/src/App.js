@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {  Switch, Route } from "react-router-dom"
+import { Switch, Route } from "react-router-dom"
 
 import About from './components/About'
 import Menu from './components/Menu'

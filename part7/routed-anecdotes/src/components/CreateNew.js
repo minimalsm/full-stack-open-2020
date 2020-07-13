@@ -1,18 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useField } from '../hooks/index'
 import { useHistory } from 'react-router-dom'
 
-const CreateNew = (props) => {
+const CreateNew = ({ addNew }) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
   const history = useHistory()
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(content)
-    console.log(author)
-    props.addNew({
+    e.preventDefault() 
+    addNew({
       content: content.value,
       author: author.value,
       info: info.value,
@@ -21,10 +19,16 @@ const CreateNew = (props) => {
     history.push('/')
   }
 
+  const handleReset = () => {
+    content.onReset()
+    author.onReset()
+    info.onReset()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           content
           <input name='content' {...content} />
@@ -37,8 +41,9 @@ const CreateNew = (props) => {
           url for more info
         <input name='info' {...info} />
         </div>
-        <button>create</button>
-      </form>
+        <button onClick={handleSubmit}>create</button>
+        <button onClick={handleReset}>reset</button>
+        </form>
     </div>
   )
 
